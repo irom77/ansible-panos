@@ -20,7 +20,7 @@ Installing 'irom77.panos:1.0.0' to '/home/docker/.ansible/collections/ansible_co
 Downloading https://galaxy.ansible.com/download/irom77-panos-1.0.0.tar.gz to /home/docker/.ansible/tmp/ansible-local-27008mhvmdaft/tmpoe95ctrr
 irom77.panos (1.0.0) was installed successfully
 
-ansible-playbook mod_test_panos_tags.yml --ask-vault-pass
+$ ansible-playbook mod_test_panos_tags.yml --ask-vault-pass
 Vault password: 
 [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
 
