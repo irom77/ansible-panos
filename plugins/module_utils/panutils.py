@@ -1,3 +1,8 @@
+DOCUMENTATION = '''
+---
+module: panutils
+short_description: Panos utility functions
+'''
 import requests, json, urllib3, xmltodict, logging
 
 def Dag_pull_all(addresses, firewall, api, dag): 
