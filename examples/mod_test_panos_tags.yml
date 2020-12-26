@@ -5,7 +5,7 @@
   #   - vars/azure_provider.yml
   tasks:
     - name: Register addresses
-      irom77.azure.panos_tags:
+      irom77.panos.panos_tags:
         url: 10.1.131.6,10.1.131.7
         dag: azure-tag.dt2
         addrlist: 1.2.3.1,1.2.3.3
