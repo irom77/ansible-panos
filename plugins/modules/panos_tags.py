@@ -2,7 +2,7 @@
 DOCUMENTATION = '''
 ---
 module: panos_tags
-short_description: Register IP addresses to Palo dynamic address group
+short_description: Sync IP addresses to Palo dynamic address group
 '''
 
 EXAMPLES = '''
@@ -15,7 +15,8 @@ EXAMPLES = '''
 '''
 from ansible.module_utils.basic import *
 import requests, json, urllib3
-from ansible.module_utils.panutils import Dag_pull, Dag_pull_all
+# from ansible.module_utils.panutils import Dag_pull, Dag_pull_all
+from ansible_collections.irom77.plugins.module_utils.panutils import Dag_pull, Dag_pull_all
 
 def dag_push(addresses, firewall, provider):
     """ Registering addresses matching Azure tag to firewall """    
