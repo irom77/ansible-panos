@@ -4,7 +4,7 @@ module: panutils
 short_description: Panos utility functions
 '''
 import requests, json, urllib3, xmltodict, logging
-
+TIMEOUT = 3
 def Dag_pull_all(addresses, firewall, api, dag): 
     """ Pulling all IPs registered with any tag on firewall 
         Returns IP registered with specific tag
@@ -16,7 +16,7 @@ def Dag_pull_all(addresses, firewall, api, dag):
         r = requests.get(url_panos, verify=False, timeout=TIMEOUT)
     except requests.exceptions.RequestException as e:    
         errors[firewall] = str(e)
-        return response, errrors
+        return response, errors
     if r.status_code == 200:
         doc = json.loads(json.dumps(xmltodict.parse(r.text)))
         entries = doc['response']['result']['entry']
@@ -25,7 +25,7 @@ def Dag_pull_all(addresses, firewall, api, dag):
                 tag2ip[dag].append(entry['@ip'])  
         response['register'].extend(Diff(addresses, tag2ip[dag]))  
         response['deregister'].extend(Diff(tag2ip[dag], addresses))
-    return response
+    return response, errors
 
 def Diff(li1, li2): 
     li_dif = [i for i in li1 if i not in li2] 
@@ -59,7 +59,7 @@ def Dag_pull(address, firewall, api, dag):
     if r.status_code == 200:
         doc = json.loads(json.dumps(xmltodict.parse(r.text)))
         if 'entry' not in doc['response']['result']: 
-            return False 
+            return False, errors 
         else:       
             member = doc['response']['result']['entry']['tag']
             if dag in member['member']:
@@ -68,4 +68,4 @@ def Dag_pull(address, firewall, api, dag):
                 response = False  
     else:
         response = False
-    return response 
+    return response, errors 
