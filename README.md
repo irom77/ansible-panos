@@ -5,7 +5,7 @@
 # Requirements
 
 - Ansible >= 2.9
-- Python >= 3.6, requests >= 2.24, xmldict >= 0.12
+- Python >= 3.6, requests >= 2.24, xmldict >= 0.12 (pip3 install -r requirements.txt)
 
 # Example usage
 
