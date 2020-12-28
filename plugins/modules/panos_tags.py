@@ -23,8 +23,10 @@ def dag_push(addresses, firewall, provider):
     cmd, errors = "", {} 
     
     headers = { 'Content-Transfer-Encoding': 'application/x-www-form-urlencoded', 'Content-Type':'application/x-www-form-urlencoded' }
-    
-    toReOrUnreOnFw = Dag_pull_all(addresses, firewall, provider['api'], provider['dag'])
+    debug_msg, change = {}, False
+    toReOrUnreOnFw, errors = Dag_pull_all(addresses, firewall, provider['api'], provider['dag'])
+    if not bool(errors):
+        return json.dumps(errors), toReOrUnreOnFw, change, debug_msg
     for register in toReOrUnreOnFw['register']:
         cmd+="""<register><entry ip="{address}" persistent="{dag_persistent}"><tag><member timeout="{dag_timeout}">{dag_tag}</member></tag></entry></register>""".format(address=str(register),dag_persistent=str(provider['persistent']), dag_timeout=str(provider['timeout']), dag_tag=str(provider['dag']))
     for deregister in toReOrUnreOnFw['deregister']:
@@ -32,7 +34,6 @@ def dag_push(addresses, firewall, provider):
     dag_cmd="""<uid-message><type>update</type><payload>{cmd}</payload></uid-message>""".format(cmd=str(cmd))
     dag_cmd=" ".join(dag_cmd.split()) # .replace(" ","")
     url_panos = "https://" + firewall + "/api?type=user-id&cmd=" + dag_cmd + "&key=" + provider['api'] # .replace(" ","")
-    debug_msg, change = {}, False
     if toReOrUnreOnFw['register'] or toReOrUnreOnFw['deregister']:
         debug_msg[firewall]= url_panos.partition("&key=")[0]
         try:

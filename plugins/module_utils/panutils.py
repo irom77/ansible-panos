@@ -10,9 +10,13 @@ def Dag_pull_all(addresses, firewall, api, dag):
         Returns IP registered with specific tag
     """
     cmd, response, tag2ip ="<show><object><registered-ip><all/></registered-ip></object></show>", {'register':[],'deregister':[]}, {dag:[]}
-
+    errors = {}
     url_panos = "https://" + firewall+ "/api?type=op&cmd=" + cmd+ "&key=" + api
-    r = requests.get(url_panos, verify=False, timeout=TIMEOUT)
+    try:
+        r = requests.get(url_panos, verify=False, timeout=TIMEOUT)
+    except requests.exceptions.RequestException as e:    
+        errors[firewall] = str(e)
+        return response, errrors
     if r.status_code == 200:
         doc = json.loads(json.dumps(xmltodict.parse(r.text)))
         entries = doc['response']['result']['entry']
@@ -46,7 +50,12 @@ def Dag_pull(address, firewall, api, dag):
     </response>
     """
     url_panos = "https://" + firewall + "/api?type=op&cmd=" + cmd + "&key=" + api
-    r = requests.get(url_panos, verify=False,timeout=TIMEOUT)
+    errors = {}
+    try:
+        r = requests.get(url_panos, verify=False,timeout=TIMEOUT)
+    except requests.exceptions.RequestException as e: 
+        errors[firewall] = str(e)
+        return False, errors
     if r.status_code == 200:
         doc = json.loads(json.dumps(xmltodict.parse(r.text)))
         if 'entry' not in doc['response']['result']: 
