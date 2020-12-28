@@ -17,7 +17,7 @@ from ansible.module_utils.basic import *
 import requests, json, urllib3
 # from ansible.module_utils.panutils import Dag_pull, Dag_pull_all
 from ansible_collections.irom77.panos.plugins.module_utils.panutils import Dag_pull, Dag_pull_all
-
+TIMEOUT = 3
 def dag_push(addresses, firewall, provider):
     """ Registering addresses matching Azure tag to firewall """    
     cmd, errors = "", {} 
@@ -36,7 +36,7 @@ def dag_push(addresses, firewall, provider):
     if toReOrUnreOnFw['register'] or toReOrUnreOnFw['deregister']:
         debug_msg[firewall]= url_panos.partition("&key=")[0]
         try:
-            response = requests.post(url_panos, headers=headers, data = {}, verify=False)
+            response = requests.post(url_panos, headers=headers, data = {}, verify=False, timeout=TIMEOUT)
         except requests.exceptions.RequestException as e:   
             errors[firewall] = str(e)
             return json.dumps(errors), toReOrUnreOnFw, change, debug_msg

@@ -5,7 +5,7 @@
 # Requirements
 
 - Ansible >= 2.9
-- Python >= 3.6
+- Python >= 3.6, requests >= 2.24, xmldict >= 0.12
 
 # Example usage
 
